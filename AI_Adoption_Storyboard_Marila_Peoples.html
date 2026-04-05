@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Adoption Module — Storyboard | Marila Peoples</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1E3A5F;
+    --accent: #2E86AB;
+    --accent-light: #A8D8EA;
+    --gold: #E8A838;
+    --bg: #F7F9FC;
+    --surface: #FFFFFF;
+    --text: #1A1A2E;
+    --muted: #6B7C93;
+    --border: #D8E4EE;
+    --success: #27AE60;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy);
+    color: white;
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 1rem; }
+  .topbar-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; background: var(--accent); color: white; padding: 3px 10px; border-radius: 20px; }
+  .topbar-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: white; }
+  .topbar-author { font-size: 12px; color: var(--accent-light); }
+
+  /* ── PROGRESS ── */
+  .progress-wrap { background: rgba(255,255,255,0.15); height: 3px; width: 100%; margin-top: 0; }
+  .progress-bar { height: 3px; background: var(--gold); transition: width 0.4s ease; }
+
+  /* ── SLIDE AREA ── */
+  .slides-container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .slide { display: none; animation: fadeUp 0.35s ease; }
+  .slide.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SLIDE HEADER ── */
+  .slide-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .slide-num {
+    background: var(--navy);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .slide-meta { flex: 1; }
+  .slide-type { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .slide-title { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--navy); line-height: 1.2; }
+
+  /* ── STORYBOARD GRID ── */
+  .sb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .sb-grid.full { grid-template-columns: 1fr; }
+
+  .sb-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .sb-panel-header {
+    background: var(--navy);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+  }
+  .sb-panel-header.accent { background: var(--accent); }
+  .sb-panel-header.gold { background: var(--gold); color: var(--navy); }
+  .sb-panel-body { padding: 1.25rem; }
+
+  /* ── VISUAL MOCK ── */
+  .visual-mock {
+    background: linear-gradient(135deg, #EBF4FA 0%, #D8EDF8 100%);
+    border-radius: 8px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+  .visual-mock::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(46,134,171,0.04) 20px, rgba(46,134,171,0.04) 40px);
+  }
+  .mock-icon { font-size: 2.5rem; position: relative; z-index: 1; }
+  .mock-label { font-size: 13px; font-weight: 500; color: var(--navy); text-align: center; position: relative; z-index: 1; }
+  .mock-sub { font-size: 11px; color: var(--muted); text-align: center; position: relative; z-index: 1; }
+
+  /* ── STAT CHIPS ── */
+  .stat-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 0.75rem 0; }
+  .stat-chip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+  }
+  .stat-chip .val { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--navy); display: block; }
+  .stat-chip .lbl { font-size: 10px; color: var(--muted); font-weight: 500; }
+
+  /* ── TEXT BLOCKS ── */
+  .narration {
+    background: #FFFDF5;
+    border-left: 3px solid var(--gold);
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    line-height: 1.7;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 0.75rem;
+    color: #3A3020;
+  }
+  .narration strong { color: var(--navy); }
+
+  .onscreen-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  ul.sb-list { padding-left: 1.25rem; }
+  ul.sb-list li { font-size: 13px; line-height: 1.7; color: var(--text); margin-bottom: 4px; }
+  ul.sb-list li::marker { color: var(--accent); }
+
+  .interaction-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: #F0F8FF;
+    border: 1px solid #BFD9EF;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 13px;
+    color: #1B5A82;
+  }
+  .interaction-note .icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── FAILURE MODE CARDS ── */
+  .failure-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin: 0.75rem 0; }
+  .f-card { background: var(--bg); border-radius: 8px; padding: 1rem; border: 1px solid var(--border); }
+  .f-card .f-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .f-card .f-title { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .f-card .f-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── PHASE TIMELINE ── */
+  .phase-list { display: flex; flex-direction: column; gap: 0.6rem; margin: 0.75rem 0; }
+  .phase-item { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .phase-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .phase-content .phase-title { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .phase-content .phase-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── RESULTS TABLE ── */
+  .results-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.75rem 0; }
+  .results-table th { background: var(--navy); color: white; padding: 8px 12px; text-align: left; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .results-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .results-table tr:last-child td { border-bottom: none; }
+  .results-table tr:nth-child(even) td { background: var(--bg); }
+  .result-val { font-weight: 600; color: var(--success); }
+
+  /* ── CHOICE INTERACTION ── */
+  .choice-prompt { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 0.75rem; }
+  .choices { display: flex; flex-direction: column; gap: 0.5rem; }
+  .choice-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .choice-btn:hover { border-color: var(--accent); background: #F0F8FF; color: var(--navy); }
+  .choice-btn.correct { border-color: var(--success); background: #F0FFF5; color: #155724; }
+  .choice-btn.incorrect { border-color: #E74C3C; background: #FFF5F5; color: #7B1F1F; }
+  .feedback { margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; font-size: 13px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #F0FFF5; border: 1px solid #A8D5B5; color: #155724; }
+  .feedback.incorrect { background: #FFF5F5; border: 1px solid #F5C6C6; color: #7B1F1F; }
+
+  /* ── REFLECTION ── */
+  .reflect-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+  .reflect-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.5rem; }
+  .reflect-q { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 0.75rem; }
+  textarea.reflect-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    resize: vertical;
+    min-height: 80px;
+    background: white;
+  }
+  textarea.reflect-input:focus { outline: none; border-color: var(--accent); }
+
+  /* ── NAV ── */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn.primary { background: var(--navy); border-color: var(--navy); color: white; }
+  .nav-btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .slide-counter { font-size: 12px; color: var(--muted); }
+
+  /* ── THUMBNAIL NAV ── */
+  .thumb-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .thumb {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border);
+    background: var(--surface); font-size: 11px; font-weight: 600; cursor: pointer;
+    color: var(--muted); display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .thumb.active { background: var(--navy); border-color: var(--navy); color: white; }
+  .thumb.visited { border-color: var(--accent); color: var(--accent); }
+
+  /* ── COVER SLIDE ── */
+  .cover-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2C5282 60%, #1A3A5C 100%);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(46,134,171,0.3) 0%, transparent 60%);
+  }
+  .cover-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 1rem; position: relative; }
+  .cover-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; line-height: 1.2; margin-bottom: 0.75rem; position: relative; }
+  .cover-title span { color: var(--gold); }
+  .cover-sub { font-size: 1rem; color: rgba(255,255,255,0.75); max-width: 480px; margin: 0 auto 1.5rem; position: relative; }
+  .cover-meta { display: flex; justify-content: center; gap: 2rem; position: relative; }
+  .cover-meta-item { text-align: center; }
+  .cover-meta-item .v { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--gold); }
+  .cover-meta-item .l { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+  @media (max-width: 600px) {
+    .sb-grid { grid-template-columns: 1fr; }
+    .failure-cards { grid-template-columns: 1fr; }
+    .cover-title { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-tag">Storyboard</span>
+    <span class="topbar-title">AI & Platform Adoption Module</span>
+  </div>
+  <span class="topbar-author">Marila Peoples · Portfolio Piece</span>
+</div>
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar" style="width: 14.28%"></div>
+</div>
+
+<div class="slides-container">
+
+  <!-- THUMB NAV -->
+  <div class="thumb-nav" id="thumbNav"></div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 1: COVER -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="cover-hero">
+      <div class="cover-tag">eLearning Module · Storyboard</div>
+      <div class="cover-title">From Scattered Use<br>to <span>95% Adoption</span></div>
+      <div class="cover-sub">How a structured enablement system transformed a district-wide platform rollout into lasting behavior change</div>
+      <div class="cover-meta">
+        <div class="cover-meta-item"><div class="v">250+</div><div class="l">Users</div></div>
+        <div class="cover-meta-item"><div class="v">5</div><div class="l">Phases</div></div>
+        <div class="cover-meta-item"><div class="v">7</div><div class="l">Slides</div></div>
+      </div>
+    </div>
+
+    <div class="sb-grid">
+      <div class="sb-panel">
+        <div class="sb-panel-header">Module Overview</div>
+        <div class="sb-panel-body">
+          <div class="onscreen-text">This case study walks through a real enablement program designed to move 250+ users from fragile, inconsistent platform use to confident, independent adoption — achieving 95% active utilization.</div>
+          <div class="stat-row">
+            <div class="stat-chip"><span class="val">~15 min</span><span class="lbl">Est. duration</span></div>
+            <div class="stat-chip"><span class="val">L&D</span><span class="lbl">Audience</span></div>
+            <div class="stat-chip"><span class="val">Blend</span><span class="lbl">Modality</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sb-panel">
+        <div class="sb-panel-header accent">Learning Objectives</div>
+        <div class="sb-panel-body">
+          <div class="onscreen-text">By the end of this module, you will be able to:</div>
+          <ul class="sb-list">
+            <li>Identify the three failure modes that stall platform adoption</li>
+            <li>Describe the five-phase system used to drive behavior change</li>
+            <li>Apply these principles to your own enablement context</li>
+            <li>Recognize what distinguishes sustained adoption from surface use</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="interaction-note">
+      <span class="icon">🎯</span>
+      <span><strong>Designer note:</strong> Cover slide uses a branded hero treatment with warm, goal-oriented framing. No quiz on this slide — learner proceeds via "Begin" button. Slide duration: self-paced.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 2: THE CHALLENGE -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="slide-header">
+      <div class="slide-num">2</div>
+      <div class="slide-meta">
+        <div class="slide-type">Scene Setting · Context</div>
+        <div class="slide-title">The Challenge: Access Isn't Adoption</div>
+      </div>
+    </div>
+
+    <div class="sb-grid">
+      <div class="sb-panel">
+        <div class="sb-panel-header">On-Screen Content</div>
+        <div class="sb-panel-body">
+          <div class="visual-mock">
+            <div class="mock-icon">📉</div>
+            <div class="mock-label">Platform rollout — Month 3</div>
+            <div class="mock-sub">Active users: ~40% · Support tickets: high · Manual workarounds: common</div>
+          </div>
+          <div class="onscreen-text">A district of 255 staff had a new digital platform. They had login credentials, a quick-start guide, and a one-hour launch session. Three months in, adoption had stalled below 50%.</div>
+          <div class="onscreen-text"><strong>The tool wasn't the problem. The system around it was.</strong></div>
+        </div>
+      </div>
+      <div class="sb-panel">
+        <div class="sb-panel-header accent">Narration Script</div>
+        <div class="sb-panel-body">
+          <div class="narration">
+            "When we launched the platform, we did what most organizations do: we gave people access and called it onboarding. We sent a guide. We ran a session. And then we waited. What we got back were the same support tickets, week after week. The same features going unused. The same workarounds. Access had happened. Adoption hadn't."
+          </div>
+          <div class="narration">
+            <strong>Pause for reflection:</strong> "Before we look at what changed, take a moment: what does adoption actually mean in your context? Not just usage — <em>confident, habitual use</em>?"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-panel" style="margin-bottom:1rem">
+      <div class="sb-panel-header gold">Designer Notes</div>
+      <div class="sb-panel-body">
+        <ul class="sb-list">
+          <li>Open with the failure state, not the solution — this creates tension and investment</li>
+          <li>Visual: simple dashboard mock showing low adoption metric, not a busy chart</li>
+          <li>Transition: fade to next slide after 3-second pause on the reflection prompt</li>
+          <li>Audio: quiet, neutral tone; no upbeat music until Phase 3</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 3: DIAGNOSING FAILURE MODES -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="slide-header">
+      <div class="slide-num">3</div>
+      <div class="slide-meta">
+        <div class="slide-type">Core Concept · Categorization</div>
+        <div class="slide-title">Not All Resistance Looks the Same</div>
+      </div>
+    </div>
+
+    <div class="sb-grid full">
+      <div class="sb-panel">
+        <div class="sb-panel-header">On-Screen Content</div>
+        <div class="sb-panel-body">
+          <div class="onscreen-text">Before designing any solution, I needed to understand <strong>why</strong> people weren't adopting — because the reason matters. Three distinct failure modes emerged:</div>
+          <div class="failure-cards">
+            <div class="f-card">
+              <div class="f-icon">🚫</div>
+              <div class="f-title">Avoidance</div>
+              <div class="f-desc">Never meaningfully onboarded. Avoided the platform entirely. Often high-anxiety users or those with negative past tech experiences.</div>
+            </div>
+            <div class="f-card">
+              <div class="f-icon">🏄</div>
+              <div class="f-title">Surface Use</div>
+              <div class="f-desc">Completed setup and used 1–2 basic features. Never explored what the platform could do for their specific role.</div>
+            </div>
+            <div class="f-card">
+              <div class="f-icon">📉</div>
+              <div class="f-title">Regression</div>
+              <div class="f-desc">Started well, then slipped back to manual habits 60–90 days post-onboarding. No reinforcement system to hold the change.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KNOWLEDGE CHECK -->
+    <div class="sb-panel">
+      <div class="sb-panel-header accent">Knowledge Check · Scenario Question</div>
+      <div class="sb-panel-body">
+        <div class="choice-prompt">A team member completed onboarding six weeks ago and was using the platform regularly. Now they've stopped logging in and gone back to spreadsheets. Which failure mode does this represent?</div>
+        <div class="choices" id="choices-3">
+          <button class="choice-btn" onclick="checkAnswer(this, false, '3')">Avoidance — they never really bought in.</button>
+          <button class="choice-btn" onclick="checkAnswer(this, false, '3')">Surface Use — they only used basic features.</button>
+          <button class="choice-btn" onclick="checkAnswer(this, true, '3')">Regression — they adopted, then lost the habit without reinforcement.</button>
+          <button class="choice-btn" onclick="checkAnswer(this, false, '3')">None of the above — this is a technical issue.</button>
+        </div>
+        <div class="feedback correct" id="fb-correct-3">✓ <strong>Correct.</strong> This is regression — the adoption happened, but wasn't sustained. The intervention needed here is reinforcement, not re-onboarding.</div>
+        <div class="feedback incorrect" id="fb-incorrect-3">Not quite. Look at the timeline: they were using it, then stopped. That points to regression — adoption that wasn't reinforced. Re-onboarding them from scratch would miss the real problem.</div>
+      </div>
+    </div>
+
+    <div class="interaction-note" style="margin-top:1rem">
+      <span class="icon">⚙️</span>
+      <span><strong>Interaction spec:</strong> Single-select multiple choice. Correct answer triggers green highlight + positive feedback. Incorrect triggers gentle correction. Learner must answer before advancing. Built in Storyline — branching layer shows feedback, then "Continue" button appears.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 4: THE SYSTEM -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="slide-header">
+      <div class="slide-num">4</div>
+      <div class="slide-meta">
+        <div class="slide-type">Process · Five-Phase System</div>
+        <div class="slide-title">Building the System: Five Phases</div>
+      </div>
+    </div>
+
+    <div class="sb-grid">
+      <div class="sb-panel">
+        <div class="sb-panel-header">On-Screen Content</div>
+        <div class="sb-panel-body">
+          <div class="onscreen-text">Each failure mode required a different intervention. The response wasn't a single training event — it was a system with five interdependent phases:</div>
+          <div class="phase-list">
+            <div class="phase-item">
+              <div class="phase-dot">1</div>
+              <div class="phase-content">
+                <div class="phase-title">Diagnose First</div>
+                <div class="phase-desc">Map failure modes before designing solutions. Data + conversation, not assumptions.</div>
+              </div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-dot">2</div>
+              <div class="phase-content">
+                <div class="phase-title">Role-Based Pathways</div>
+                <div class="phase-desc">Replace generic onboarding with role-specific entry points tied to real tasks.</div>
+              </div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-dot">3</div>
+              <div class="phase-content">
+                <div class="phase-title">Self-Service Knowledge System</div>
+                <div class="phase-desc">Make finding the answer faster than submitting a ticket. Modular, task-based assets.</div>
+              </div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-dot">4</div>
+              <div class="phase-content">
+                <div class="phase-title">Reinforcement Layer</div>
+                <div class="phase-desc">Timed follow-up content to prevent regression. Tied to natural workflow moments.</div>
+              </div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-dot">5</div>
+              <div class="phase-content">
+                <div class="phase-title">AI Integration</div>
+                <div class="phase-desc">Embed AI-supported workflows to reduce effort and model confident AI use.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sb-panel">
+        <div class="sb-panel-header accent">Narration Script</div>
+        <div class="sb-panel-body">
+          <div class="narration">"The core shift was this: instead of asking 'how do we get people to use the platform,' we asked 'what's actually getting in their way?' Once we understood the failure modes, we could design to each one specifically."</div>
+          <div class="narration">"Avoidance needed a low-stakes entry point and an early win. Surface use needed role relevance — connecting the tool to the exact work they already did. Regression needed a system that didn't rely on willpower. <strong>Each of these is a design problem, not a motivation problem.</strong>"</div>
+          <div class="visual-mock" style="margin-top:0.75rem">
+            <div class="mock-icon">🔄</div>
+            <div class="mock-label">System diagram: 5-phase loop</div>
+            <div class="mock-sub">Diagnose → Design → Deploy → Reinforce → Iterate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="interaction-note">
+      <span class="icon">⚙️</span>
+      <span><strong>Interaction spec:</strong> Phases animate in sequentially on click/tap (Storyline entrance animation). Each phase number is clickable to expand detail. On mobile: stacked accordion. Estimated time on slide: 2–3 min.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 5: AI INTEGRATION DEEP DIVE -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="slide-header">
+      <div class="slide-num">5</div>
+      <div class="slide-meta">
+        <div class="slide-type">Deep Dive · AI Integration</div>
+        <div class="slide-title">Where AI Fit In</div>
+      </div>
+    </div>
+
+    <div class="sb-grid">
+      <div class="sb-panel">
+        <div class="sb-panel-header">On-Screen Content</div>
+        <div class="sb-panel-body">
+          <div class="onscreen-text">AI wasn't added to the enablement program as an afterthought — it was woven into the system in two distinct ways:</div>
+          <div style="margin: 0.75rem 0;">
+            <div style="background:#F0F8FF;border-radius:8px;padding:1rem;margin-bottom:0.6rem;border:1px solid #BFD9EF">
+              <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:4px">AS A CONTENT TOOL</div>
+              <div style="font-size:13px;color:var(--text)">AI tools (Claude, ChatGPT) were used to accelerate the development of learning assets — drafting job aids, generating scenario variations, and personalizing examples by role. This reduced content development time significantly.</div>
+            </div>
+            <div style="background:#F5FFF5;border-radius:8px;padding:1rem;border:1px solid #B2DFB2">
+              <div style="font-size:12px;font-weight:600;color:var(--success);margin-bottom:4px">AS A WORKFLOW LAYER</div>
+              <div style="font-size:13px;color:var(--text)">AI-supported guided workflows were built directly into the user experience — helping staff complete complex tasks with less cognitive load. The goal was to reduce hesitation by showing concrete, role-specific application rather than abstract capability.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sb-panel">
+        <div class="sb-panel-header accent">Narration Script</div>
+        <div class="sb-panel-body">
+          <div class="narration">"The biggest barrier to AI adoption isn't skepticism — it's uncertainty. People don't know where to start. The question I kept hearing was: 'what would I even use it for?' So we answered it specifically. Not 'AI can help with writing' — but 'here's the exact prompt to draft your parent communication in under 2 minutes.'"</div>
+          <div class="narration">"When you give people a concrete workflow instead of a capability overview, the activation energy drops dramatically. That's the design principle."</div>
+          <div class="visual-mock" style="margin-top:0.75rem; min-height:120px;">
+            <div class="mock-icon">🤖</div>
+            <div class="mock-label">AI workflow example</div>
+            <div class="mock-sub">"Here is the task. Here is the prompt. Here is what you do with the output."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFLECTION -->
+    <div class="sb-panel">
+      <div class="sb-panel-header gold">Reflection Activity</div>
+      <div class="sb-panel-body">
+        <div class="reflect-box">
+          <div class="reflect-label">Apply it to your context</div>
+          <div class="reflect-q">Think of one task your team does regularly that takes more time than it should. How might an AI-supported workflow reduce friction for that specific task?</div>
+          <textarea class="reflect-input" placeholder="Type your response here — this is for your own reflection and won't be submitted..."></textarea>
+        </div>
+        <div class="interaction-note">
+          <span class="icon">📝</span>
+          <span><strong>Spec:</strong> Free-text reflection (non-graded). In LMS: capture response optionally for manager visibility. On standalone: local only. Learner can skip but encouraged to engage. Continue button always available.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 6: RESULTS -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="slide-header">
+      <div class="slide-num">6</div>
+      <div class="slide-meta">
+        <div class="slide-type">Results · Impact Summary</div>
+        <div class="slide-title">What Changed — and Why It Held</div>
+      </div>
+    </div>
+
+    <div class="sb-grid full">
+      <div class="sb-panel">
+        <div class="sb-panel-header">On-Screen Content</div>
+        <div class="sb-panel-body">
+          <div class="stat-row" style="margin-bottom:1.25rem">
+            <div class="stat-chip"><span class="val" style="color:var(--success)">95%</span><span class="lbl">Active adoption</span></div>
+            <div class="stat-chip"><span class="val" style="color:var(--accent)">242</span><span class="lbl">of 255 users</span></div>
+            <div class="stat-chip"><span class="val" style="color:var(--gold)">20+</span><span class="lbl">Programs/year</span></div>
+          </div>
+          <table class="results-table">
+            <tr><th>What We Measured</th><th>Result</th></tr>
+            <tr><td>Platform adoption rate</td><td class="result-val">95% active users</td></tr>
+            <tr><td>Feature depth</td><td>Measurable increase in advanced feature utilization</td></tr>
+            <tr><td>Self-service resolution</td><td>Significant drop in repeat support tickets</td></tr>
+            <tr><td>Post-onboarding retention</td><td>Sustained engagement past 90 days</td></tr>
+            <tr><td>Workflow consistency</td><td>Standardized execution; reduced errors</td></tr>
+            <tr><td>AI integration</td><td>Core tasks completed faster via AI-assisted workflows</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-grid">
+      <div class="sb-panel">
+        <div class="sb-panel-header accent">Narration Script</div>
+        <div class="sb-panel-body">
+          <div class="narration">"95% adoption isn't the interesting number. The interesting number is that it held. Six months after the reinforcement layer launched, active users were still active. People who had regressed came back. Users who had only surface-used began completing advanced workflows on their own."</div>
+          <div class="narration">"That's what a system does that a training event can't."</div>
+        </div>
+      </div>
+      <div class="sb-panel">
+        <div class="sb-panel-header gold">Designer Notes</div>
+        <div class="sb-panel-body">
+          <ul class="sb-list">
+            <li>Animate stat chips counting up (0 → final value) on slide entry — 1.5s ease-out</li>
+            <li>Table rows reveal sequentially with 100ms stagger</li>
+            <li>Results framing emphasizes durability, not just peak numbers</li>
+            <li>No knowledge check here — let the results land without interruption</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SLIDE 7: TAKEAWAYS + CLOSE -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="slide-header">
+      <div class="slide-num">7</div>
+      <div class="slide-meta">
+        <div class="slide-type">Summary · Application</div>
+        <div class="slide-title">What This Means for Your Work</div>
+      </div>
+    </div>
+
+    <div class="sb-grid">
+      <div class="sb-panel">
+        <div class="sb-panel-header">Key Takeaways</div>
+        <div class="sb-panel-body">
+          <ul class="sb-list" style="font-size:14px">
+            <li style="margin-bottom:0.75rem"><strong>Diagnose before you design.</strong> Not all adoption failure looks the same. The intervention must match the failure mode.</li>
+            <li style="margin-bottom:0.75rem"><strong>Make the right behavior easier than the wrong one.</strong> Self-service should be faster than asking for help. AI workflows should reduce, not add, cognitive load.</li>
+            <li style="margin-bottom:0.75rem"><strong>Onboarding is not an event.</strong> Adoption is a system — entry, reinforcement, and feedback loops working together.</li>
+            <li><strong>AI adoption follows the same rules.</strong> Show people what to do with it, not what it can do in theory.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sb-panel">
+        <div class="sb-panel-header accent">Final Reflection</div>
+        <div class="sb-panel-body">
+          <div class="reflect-box">
+            <div class="reflect-label">Before you close</div>
+            <div class="reflect-q">Which of the five phases would have the most impact if you applied it to a current challenge in your organization? What would your first step be?</div>
+            <textarea class="reflect-input" placeholder="Your response..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-panel" style="margin-bottom:1.5rem">
+      <div class="sb-panel-header gold">Module Summary & Next Steps</div>
+      <div class="sb-panel-body">
+        <div class="onscreen-text">This module is one piece of a broader enablement portfolio. Related artifacts available on request:</div>
+        <div class="stat-row">
+          <div class="stat-chip"><span class="val" style="font-size:1.1rem">📋</span><span class="lbl">SBG Case Study</span></div>
+          <div class="stat-chip"><span class="val" style="font-size:1.1rem">🏥</span><span class="lbl">HIPAA Module</span></div>
+          <div class="stat-chip"><span class="val" style="font-size:1.1rem">💬</span><span class="lbl">Comms Module</span></div>
+          <div class="stat-chip"><span class="val" style="font-size:1.1rem">🎨</span><span class="lbl">Figma SBD</span></div>
+        </div>
+        <div style="margin-top:1rem;padding:0.75rem 1rem;background:var(--bg);border-radius:8px;font-size:13px;color:var(--muted)">
+          Marila Peoples · grahammarila@gmail.com · (619) 871-4886 · <span style="color:var(--accent)">sites.google.com/view/marilapeoples</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+    <span class="slide-counter" id="slideCounter">Slide 1 of 7</span>
+    <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+  </div>
+
+</div>
+
+<script>
+  const totalSlides = 7;
+  let current = 1;
+  const visited = new Set([1]);
+
+  function buildThumbs() {
+    const nav = document.getElementById('thumbNav');
+    for (let i = 1; i <= totalSlides; i++) {
+      const t = document.createElement('button');
+      t.className = 'thumb' + (i === 1 ? ' active' : '');
+      t.textContent = i;
+      t.setAttribute('aria-label', 'Go to slide ' + i);
+      t.onclick = () => goTo(i);
+      nav.appendChild(t);
+    }
+  }
+
+  function updateUI() {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-' + current).classList.add('active');
+    document.getElementById('slideCounter').textContent = 'Slide ' + current + ' of ' + totalSlides;
+    document.getElementById('prevBtn').disabled = current === 1;
+    document.getElementById('nextBtn').disabled = current === totalSlides;
+    document.getElementById('nextBtn').textContent = current === totalSlides ? 'Finish ✓' : 'Next →';
+    document.getElementById('progressBar').style.width = (current / totalSlides * 100) + '%';
+
+    document.querySelectorAll('.thumb').forEach((t, i) => {
+      t.className = 'thumb' + (i + 1 === current ? ' active' : visited.has(i + 1) ? ' visited' : '');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 1 && next <= totalSlides) { goTo(next); }
+  }
+
+  function goTo(n) {
+    current = n;
+    visited.add(n);
+    updateUI();
+  }
+
+  function checkAnswer(btn, correct, slideId) {
+    const choices = document.querySelectorAll('#choices-' + slideId + ' .choice-btn');
+    choices.forEach(b => b.disabled = true);
+    if (correct) {
+      btn.classList.add('correct');
+      const fb = document.getElementById('fb-correct-' + slideId);
+      fb.classList.add('show');
+    } else {
+      btn.classList.add('incorrect');
+      const fb = document.getElementById('fb-incorrect-' + slideId);
+      fb.classList.add('show');
+      choices.forEach(b => {
+        if (b.onclick.toString().includes('true')) b.classList.add('correct');
+      });
+    }
+  }
+
+  buildThumbs();
+</script>
+</body>
+</html>
